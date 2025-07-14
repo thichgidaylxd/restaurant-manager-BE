@@ -50,7 +50,7 @@ public class InvoiceService {
         List<OrderItem> orderItems = orderItemRepo.findByTableOrder_Table_Id(tableId);
 
         //Dữ liệu mẫu
-        Customer customer = new Customer("Dũng", "1234568810");
+        Customer customer = new Customer("Dũng", "1234568891");
         customerRepo.save(customer);
 
         //Tính tổng tiền

@@ -24,7 +24,16 @@ public class Tables {
     @Column(unique = true, nullable = false)
     private String name;
 
-    private String status = "Trống";
+    private String status;
+
+    @Column(nullable = false)
     private Integer maxPerson;
     private String note;
+
+    @PrePersist
+    private void prePersist(){
+        if(status==null || status.isBlank()) setStatus("Đang sử dụng");
+        if(maxPerson==null) setMaxPerson(4);
+        if(note==null || note.isBlank()) setNote("");
+    }
 }

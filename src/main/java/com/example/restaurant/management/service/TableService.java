@@ -1,20 +1,21 @@
 package com.example.restaurant.management.service;
 
-import com.example.restaurant.management.dto.request.Table.TablesCreateRequest;
+import com.example.restaurant.management.dto.Table.TableCreateRequest;
+import com.example.restaurant.management.dto.Table.TableResponse;
 import com.example.restaurant.management.entity.TableType;
 import com.example.restaurant.management.entity.Tables;
 import com.example.restaurant.management.exception.AppException;
 import com.example.restaurant.management.exception.ErrorCode;
-import com.example.restaurant.management.repository.DishRepo;
+import com.example.restaurant.management.mapper.TableMapper;
 import com.example.restaurant.management.repository.TableTypeRepo;
 import com.example.restaurant.management.repository.TablesRepo;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,6 +25,7 @@ public class TableService {
 
     TablesRepo tablesRepo;
     TableTypeRepo tableTypeRepo;
+    TableMapper tableMapper;
 
 //    public Tables createTable(TablesCreateRequest tablesRequest){
 //        if(tablesRepo.existsByName(tablesRequest.getName()))
@@ -41,12 +43,15 @@ public class TableService {
 //        return tablesRepo.save(newTable);
 //    }
 
-    public Tables createTable(Tables tables){
-        if(tablesRepo.existsByName(tables.getName()))
+    public TableResponse createTable(TableCreateRequest request){
+        if(tablesRepo.existsByName(request.getName()))
             throw new AppException(ErrorCode.TABLE_EXISTED);
-        tableTypeRepo.findById(tables.getTableType().getId())
+
+        TableType tableType = tableTypeRepo.findById(request.getTableType().getId())
                 .orElseThrow(()->new AppException(ErrorCode.TABLETYPE_NOT_FOUND));
-        return tablesRepo.save(tables);
+        Tables newTable = tableMapper.toTable(request,tableType);
+
+        return tableMapper.toTableResponse(tablesRepo.save(newTable));
     }
 
     public Tables updateTable(Tables tables){
@@ -56,16 +61,17 @@ public class TableService {
     }
 
 
-    public Tables updateTableStatus(UUID tableId, String status){
+    @Transactional
+    public TableResponse updateTableStatus(UUID tableId, String status){
+        tablesRepo.updateStatusById(tableId,status);
         Tables table = tablesRepo.findById(tableId)
                         .orElseThrow(()->new AppException(ErrorCode.TABLE_NOT_FOUND));
-        tablesRepo.updateStatusById(tableId,status);
-        return table;
+        return tableMapper.toTableResponse(table);
     }
 
 
-    public List<Tables> findAll(){
-        return tablesRepo.findAll();
+    public List<TableResponse> findAll(){
+        return tablesRepo.findAll().stream().map(tableMapper::toTableResponse).toList();
     }
 
     public Tables findById(UUID tableId){

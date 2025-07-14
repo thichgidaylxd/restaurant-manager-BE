@@ -1,6 +1,8 @@
 package com.example.restaurant.management.controller;
 
 import com.example.restaurant.management.dto.ApiRe.ApiResponse;
+import com.example.restaurant.management.dto.Table.TableCreateRequest;
+import com.example.restaurant.management.dto.Table.TableResponse;
 import com.example.restaurant.management.entity.Tables;
 import com.example.restaurant.management.service.TableService;
 import com.example.restaurant.management.service.TableTypeService;
@@ -26,14 +28,14 @@ public class TableController {
     SimpMessagingTemplate messagingTemplate;
 
     @GetMapping
-    public ApiResponse<List<Tables>> getAllTable() {
+    public ApiResponse<List<TableResponse>> getAllTable() {
 
-        List<Tables> allTables = tableService.findAll();
+        List<TableResponse> allTables = tableService.findAll();
         messagingTemplate.convertAndSend("/topic/tables", allTables);
 
-        return ApiResponse.<List<Tables>>builder()
+        return ApiResponse.<List<TableResponse>>builder()
                 .data(allTables)
-                .message("Danh sách bàn")
+                .message("Tất cả bàn")
                 .build();
     }
 
@@ -49,14 +51,23 @@ public class TableController {
 
 
     @PostMapping
-    public ApiResponse<Tables> addTable(@RequestBody Tables table) {
-        Tables newTable = tableService.createTable(table);
+    public ApiResponse<TableResponse> addTable(@RequestBody TableCreateRequest table) {
+        TableResponse newTable = tableService.createTable(table);
 
         messagingTemplate.convertAndSend("/topic/table-added", newTable);
 
-        return ApiResponse.<Tables>builder()
+        return ApiResponse.<TableResponse>builder()
                 .data(newTable)
                 .message("Thêm bàn thành công")
+                .build();
+    }
+
+    @PatchMapping("/{tableId}/update-status")
+    public ApiResponse<TableResponse> updateTableStatus(@PathVariable UUID tableId, String status){
+        TableResponse tableStatusUpdated = tableService.updateTableStatus(tableId,status);
+        return ApiResponse.<TableResponse>builder()
+                .data(tableStatusUpdated)
+                .message("Bàn đã cập nhật trạng thái mới")
                 .build();
     }
 

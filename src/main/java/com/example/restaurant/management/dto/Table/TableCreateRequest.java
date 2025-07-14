@@ -1,16 +1,18 @@
-package com.example.restaurant.management.dto.request.Table;
+package com.example.restaurant.management.dto.Table;
 
+import com.example.restaurant.management.entity.TableType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TablesCreateRequest {
+public class TableCreateRequest {
     private String name;
-    private String tableTypeId;
-    private String status = "Trống";
+    private TableType tableType;
     private Integer maxPerson;
     private String note;
 }

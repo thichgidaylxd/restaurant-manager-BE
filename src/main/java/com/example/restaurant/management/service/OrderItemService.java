@@ -40,13 +40,10 @@ public class OrderItemService {
 
     public List<OrderItemResponse> findOrderItemByTableId(UUID tableId) {
 
-        tablesRepo.findById(tableId)
-                .orElseThrow(()->new AppException(ErrorCode.TABLE_NOT_FOUND));
+//        tablesRepo.findById(tableId)
+//                .orElseThrow(()->new AppException(ErrorCode.TABLE_NOT_FOUND));
 
         List<OrderItem> items = orderItemRepo.findByTableOrder_Table_Id(tableId);
-
-        if (items.isEmpty())
-            throw new AppException(ErrorCode.TABLE_HAVE_NOT_ITEMS);
 
         List<OrderItemResponse> orderItemResponses = items.stream()
                 .map(Builder::buildOrderItemResponse)
