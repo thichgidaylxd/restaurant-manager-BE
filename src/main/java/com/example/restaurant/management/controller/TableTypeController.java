@@ -22,17 +22,9 @@ public class TableTypeController {
 
     TableTypeService tableTypeService;
 
-    @Autowired
-    SimpMessagingTemplate messagingTemplate;
-
-
     @GetMapping
     public ApiResponse<List<TableType>> findAllTable() {
         List<TableType> tableTypes = tableTypeService.findAll();
-
-        // Push realtime về topic cụ thể cho client đang subscribe
-        messagingTemplate.convertAndSend("/topic/tabletype-updates", tableTypes);
-
         return ApiResponse.<List<TableType>>builder()
                 .data(tableTypes)
                 .message("Danh sách loại bàn")
@@ -42,9 +34,6 @@ public class TableTypeController {
     @PostMapping
     public ApiResponse<TableType> addTableType(@RequestBody TableType tableType) {
         TableType newTableType = tableTypeService.createTaleType(tableType);
-
-        messagingTemplate.convertAndSend("/topic/tabletype-added", newTableType);
-
         return ApiResponse.<TableType>builder()
                 .data(newTableType)
                 .message("Thêm loại bàn thành công")
@@ -53,11 +42,7 @@ public class TableTypeController {
 
     @DeleteMapping("/{tableTypeId}")
     public ApiResponse<TableType> deleteTable(@PathVariable UUID tableTypeId) {
-        TableType deletedTableType = tableTypeService.findById(tableTypeId);
         tableTypeService.deleteById(tableTypeId);
-
-        messagingTemplate.convertAndSend("/topic/tabletype-deleted", deletedTableType);
-
         return ApiResponse.<TableType>builder()
                 .message("Xóa loại bàn thành công")
                 .build();

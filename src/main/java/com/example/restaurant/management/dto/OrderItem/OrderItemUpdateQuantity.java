@@ -12,6 +12,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class OrderItemUpdateQuantity {
-    private UUID id;
+    private UUID orderItemId;
     private Integer quantity;
 }

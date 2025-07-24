@@ -17,3 +17,7 @@ jpa:
   properties:
     hibernate:
       format_sql: true
+
+jwt:
+  signerKey: "X7kP9mQ2vL8jY4tR6uI0oW5zA3xC1bF9hD7eJ3gK5mN8pQ1rT4vL6yI0oW2zX7cV9mB3rT6yI0oW5zA3xC1bF9hD7eJ3gK5mN8pQ1r"
+  valid-duration: 43200

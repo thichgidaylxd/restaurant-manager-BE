@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/dishes-type")
+@RequestMapping("/dish-types")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class DishTypeController {
 

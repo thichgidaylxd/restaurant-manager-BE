@@ -28,7 +28,8 @@ public class Dish {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(nullable = false)
+    private Integer sold;
+
     private String unit;
 
     private String note;
@@ -36,7 +37,16 @@ public class Dish {
     @Lob
     private byte[] image;
 
-    private Boolean status = true;
+    private Boolean status;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    private void prePersist(){
+        setCreatedAt(LocalDateTime.now());
+        if(unit.isEmpty()) setUnit("Món");
+        if(image==null) setImage(null);
+        if(status==null) setStatus(true);
+        if(sold==null) setSold(0);
+    }
 }

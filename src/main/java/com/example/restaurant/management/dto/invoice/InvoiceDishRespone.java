@@ -1,4 +1,4 @@
-package com.example.restaurant.management.dto.response;
+package com.example.restaurant.management.dto.invoice;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

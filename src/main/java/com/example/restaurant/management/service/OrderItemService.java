@@ -35,13 +35,14 @@ public class OrderItemService {
     TableOrderRepo tableOrderRepo;
     TablesRepo tablesRepo;
     DishRepo dishRepo;
+    TableService tableService;
 
 
 
     public List<OrderItemResponse> findOrderItemByTableId(UUID tableId) {
 
-//        tablesRepo.findById(tableId)
-//                .orElseThrow(()->new AppException(ErrorCode.TABLE_NOT_FOUND));
+        tablesRepo.findById(tableId)
+                .orElseThrow(()->new AppException(ErrorCode.TABLE_NOT_FOUND));
 
         List<OrderItem> items = orderItemRepo.findByTableOrder_Table_Id(tableId);
 
@@ -66,7 +67,10 @@ public class OrderItemService {
         Tables table = tablesRepo.findById(tableId)
                 .orElseThrow(() -> new AppException(ErrorCode.TABLE_NOT_FOUND));
 
+        if(!table.getStatus().equals("Đang sử dụng")) tableService.updateTableStatus(table.getId(), "Đang sử dụng");
+
         TableOrder tableOrder = tableOrderRepo.findByTable_IdAndStatusNot(tableId,"Done");
+
         if (tableOrder == null) {
             tableOrder = TableOrder.builder()
                     .table(table)
@@ -89,8 +93,8 @@ public class OrderItemService {
 
 
         @Transactional
-        public OrderItemUpdateQuantity updateOrderItemQuantity(OrderItemUpdateQuantity updateQuantity){
-            OrderItem orderItem = orderItemRepo.findById(updateQuantity.getId())
+        public OrderItemResponse updateOrderItemQuantity(OrderItemUpdateQuantity updateQuantity){
+            OrderItem orderItem = orderItemRepo.findById(updateQuantity.getOrderItemId())
                                                     .orElseThrow(() -> new AppException(ErrorCode.ITEM_NOT_FOUND));
 
             orderItem.setQuantity(orderItem.getQuantity() + updateQuantity.getQuantity());
@@ -98,10 +102,15 @@ public class OrderItemService {
 
             if(newQuantity <= 0) orderItemRepo.delete(orderItem);
             else orderItemRepo.save(orderItem);
-            return OrderItemUpdateQuantity.builder()
-                    .id(updateQuantity.getId())
-                    .quantity(newQuantity)
-                    .build();
+
+            return Builder.buildOrderItemResponse(orderItem);
+        }
+
+        public OrderItemResponse updateOrderItemStatus(UUID orderItemId, String status ){
+            OrderItem orderItem = orderItemRepo.findById(orderItemId)
+                    .orElseThrow(() -> new AppException(ErrorCode.ITEM_NOT_FOUND));
+            orderItemRepo.updateStatusById(orderItemId,status);
+            return Builder.buildOrderItemResponse(orderItem);
         }
 
 
@@ -122,19 +131,13 @@ public class OrderItemService {
 //    }
 
 
-    public void deleteOrderItemById(UUID orderItemById){
+    public void deleteOrderItemById(UUID tableId,UUID orderItemById){
         orderItemRepo.deleteById(orderItemById);
+        List<OrderItem> orderItems =  orderItemRepo.findByTableOrder_Table_Id(tableId);
+        if (orderItems.isEmpty()) tableService.updateTableStatus(tableId,"Trống");
     }
 
 
-    private OrderItem buildOrderItem(Dish dish, TableOrder order, OrderItemCreate create) {
-        return OrderItem.builder()
-                .tableOrder(order)
-                .dish(dish)
-                .quantity(create.getQuantity())
-                .note(create.getNote())
-                .build();
-    }
 
 
 
@@ -145,7 +148,7 @@ public class OrderItemService {
         if (existingOpt.isPresent()) {
             OrderItem existingItem = existingOpt.get();
             existingItem.setQuantity(existingItem.getQuantity() + orderItem.getQuantity());
-            existingItem.setNote(orderItem.getNote());
+            if(orderItem.getNote()!=null) existingItem.setNote(orderItem.getNote());
             return orderItemRepo.save(existingItem);
         } else {
             OrderItem newItem = OrderItem.builder()

@@ -22,5 +22,12 @@ public class Revenue {
     private LocalDate date;
     private BigDecimal totalAmount;
     private Integer invoiceCount;
-    private Integer dishSoldCount;
+
+
+    @PrePersist
+    public void prePersist(){
+        if(date==null) setDate(LocalDate.now());
+        if(totalAmount==null) setTotalAmount(BigDecimal.ZERO);
+        if(invoiceCount==null) setInvoiceCount(0);
+    }
 }

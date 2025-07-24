@@ -2,9 +2,6 @@ package com.example.restaurant.management.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.cglib.core.Local;
-import org.springframework.data.annotation.Persistent;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -26,12 +23,13 @@ public class Invoice {
     private TableOrder tableOrder;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "user_account_id")
+    private UserAccount userAccount;
 
     @Column(nullable = false)
     private BigDecimal sum;
 
+    private String payMethod;
 
     private Boolean paid = true;
     @PrePersist
@@ -39,8 +37,9 @@ public class Invoice {
         if(paid == null){
             setPaid(true);
         }
+        setCreatedAt(LocalDateTime.now());
     }
 
 
-    private LocalDateTime completedAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 }

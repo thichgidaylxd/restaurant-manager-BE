@@ -1,9 +1,8 @@
 package com.example.restaurant.management.repository;
 
-import com.example.restaurant.management.entity.Customer;
+import com.example.restaurant.management.entity.Permission;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface CustomerRepo extends JpaRepository<Customer, UUID> {
-}
+public interface PermissionRepo extends JpaRepository<Permission, UUID> {}

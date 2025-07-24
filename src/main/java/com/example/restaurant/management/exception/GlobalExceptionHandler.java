@@ -2,13 +2,12 @@
 package com.example.restaurant.management.exception;
 
 import com.example.restaurant.management.dto.ApiRe.ApiErrorResponse;
-import com.example.restaurant.management.dto.ApiRe.ApiResponse;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.naming.AuthenticationException;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
@@ -37,6 +36,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(errorCode.getHttpStatus()).body(apiErrorResponse);
     }
+
 
 }
 

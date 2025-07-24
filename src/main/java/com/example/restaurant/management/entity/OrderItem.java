@@ -32,12 +32,12 @@ public class OrderItem {
     private String note;
 
 
-    private String status = "Ordered";
+    private String status;
 
     @PrePersist
     public void prePersist() {
         if (status == null || status.isBlank()) {
-            status = "Ordered";
+            status = "Chưa gọi";
         }
     }
 }

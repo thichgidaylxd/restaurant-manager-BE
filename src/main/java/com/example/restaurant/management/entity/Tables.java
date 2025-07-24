@@ -24,6 +24,7 @@ public class Tables {
     @Column(unique = true, nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String status;
 
     @Column(nullable = false)
@@ -32,7 +33,7 @@ public class Tables {
 
     @PrePersist
     private void prePersist(){
-        if(status==null || status.isBlank()) setStatus("Đang sử dụng");
+        if(status==null || status.isBlank()) setStatus("Trống");
         if(maxPerson==null) setMaxPerson(4);
         if(note==null || note.isBlank()) setNote("");
     }

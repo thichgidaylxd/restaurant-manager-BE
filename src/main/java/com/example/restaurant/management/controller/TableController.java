@@ -3,6 +3,7 @@ package com.example.restaurant.management.controller;
 import com.example.restaurant.management.dto.ApiRe.ApiResponse;
 import com.example.restaurant.management.dto.Table.TableCreateRequest;
 import com.example.restaurant.management.dto.Table.TableResponse;
+import com.example.restaurant.management.dto.Table.TableUpdateStatus;
 import com.example.restaurant.management.entity.Tables;
 import com.example.restaurant.management.service.TableService;
 import com.example.restaurant.management.service.TableTypeService;
@@ -22,16 +23,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TableController {
 
-    TableTypeService tableTypeService;
     TableService tableService;
-    @Autowired
-    SimpMessagingTemplate messagingTemplate;
+
 
     @GetMapping
     public ApiResponse<List<TableResponse>> getAllTable() {
 
         List<TableResponse> allTables = tableService.findAll();
-        messagingTemplate.convertAndSend("/topic/tables", allTables);
 
         return ApiResponse.<List<TableResponse>>builder()
                 .data(allTables)
@@ -40,13 +38,6 @@ public class TableController {
     }
 
 
-//    // Get tableorder by id
-//    @GetMapping("/{id}/items")
-//    ApiResponse<List<OrderItemRequest>> getTableByName(@PathVariable String id){
-//        ApiResponse<List<OrderItemRequest>> apiResponse = new ApiResponse<>();
-//        apiResponse.setData(orderItemService.findItemsByTableId(id));
-//        return apiResponse;
-//    }
 
 
 
@@ -54,7 +45,6 @@ public class TableController {
     public ApiResponse<TableResponse> addTable(@RequestBody TableCreateRequest table) {
         TableResponse newTable = tableService.createTable(table);
 
-        messagingTemplate.convertAndSend("/topic/table-added", newTable);
 
         return ApiResponse.<TableResponse>builder()
                 .data(newTable)
@@ -63,8 +53,8 @@ public class TableController {
     }
 
     @PatchMapping("/{tableId}/update-status")
-    public ApiResponse<TableResponse> updateTableStatus(@PathVariable UUID tableId, String status){
-        TableResponse tableStatusUpdated = tableService.updateTableStatus(tableId,status);
+    public ApiResponse<TableResponse> updateTableStatus(@PathVariable UUID tableId, @RequestBody TableUpdateStatus tableUpdateStatus){
+        TableResponse tableStatusUpdated = tableService.updateTableStatus(tableId,tableUpdateStatus.getStatus());
         return ApiResponse.<TableResponse>builder()
                 .data(tableStatusUpdated)
                 .message("Bàn đã cập nhật trạng thái mới")
@@ -76,8 +66,6 @@ public class TableController {
         Tables deletedTable = tableService.findById(tableId);
 
         tableService.deleteTable(tableId);
-
-        messagingTemplate.convertAndSend("/topic/table-deleted", deletedTable);
 
         return ApiResponse.<Tables>builder()
                 .message("Bàn đã xóa thành công")
