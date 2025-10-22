@@ -6,9 +6,10 @@ server:
 
 spring:
   datasource:
-    url: "jdbc:postgresql://localhost:5432/restaurant_management"
-    username: postgres
-    password: 123456
+    url: "jdbc:postgresql://dpg-d3s8lja4d50c738kfpfg-a.singapore-postgres.render.com:5432/db_res_105e"
+    username: root
+    password: LmvCJ8n9PQ8gzDcD8zGx11rGhfkjwK0v
+
 
   jpa:
     show-sql: true
