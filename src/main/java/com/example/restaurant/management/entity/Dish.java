@@ -1,6 +1,8 @@
 package com.example.restaurant.management.entity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -34,8 +36,8 @@ public class Dish {
 
     private String note;
 
-    @Lob
-    @Column(name = "image", columnDefinition = "bytea")
+    @JdbcTypeCode(SqlTypes.VARBINARY)  // Thêm dòng này
+    @Column(name = "image")
     private byte[] image;
 
     private Boolean status;

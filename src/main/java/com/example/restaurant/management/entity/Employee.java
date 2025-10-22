@@ -3,6 +3,8 @@ package com.example.restaurant.management.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,8 +29,8 @@ public class Employee {
     @Column(nullable = false)
     private String employeeName;
 
-    @Lob
-    @Column(name = "image", columnDefinition = "bytea")
+    @JdbcTypeCode(SqlTypes.VARBINARY)
+    @Column(name = "image")
     private byte[] image;
 
     private String address;

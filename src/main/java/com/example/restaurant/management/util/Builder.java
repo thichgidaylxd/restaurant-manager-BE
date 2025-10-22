@@ -87,9 +87,7 @@ public class Builder {
     }
 
     public static DishResponse toDishResponse(Dish dish){
-        String image = dish.getImage() != null?
-                Base64.getEncoder().encodeToString(dish.getImage())
-                :null;
+
         return DishResponse.builder()
                 .id(dish.getId())
                 .dishType(dish.getDishType())
@@ -98,7 +96,7 @@ public class Builder {
                 .sold(dish.getSold())
                 .status(dish.getStatus())
                 .unit(dish.getUnit())
-                .image(image)
+                .image(dish.getImage())
                 .note(dish.getNote())
                 .createdAt(dish.getCreatedAt())
                 .build();

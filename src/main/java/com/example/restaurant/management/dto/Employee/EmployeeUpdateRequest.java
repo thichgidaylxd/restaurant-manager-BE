@@ -17,9 +17,9 @@ import java.util.UUID;
 public class EmployeeUpdateRequest {
     private UUID id;
     private String name;
-    private UUID positionId;
-    private byte[] image;
-    private String address;
+    private String imageBase64;  // Đổi từ image sang imageBase64
     private String phoneNumber;
+    private UUID positionId;
+    private String address;
     private LocalDate birthDate;
 }

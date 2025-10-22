@@ -16,9 +16,9 @@ import java.util.UUID;
 @Builder
 public class EmployeeCreateRequest {
     private String employeeName;
-    private UUID positionId;
-    private byte[] image;
-    private String address;
+    private String imageBase64;  // Đổi từ image sang imageBase64
     private String phoneNumber;
+    private UUID positionId;
+    private String address;
     private LocalDate birthDate;
 }

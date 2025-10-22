@@ -30,7 +30,7 @@ public class DishResponse {
 
     private String note;
 
-    private String image;
+    private byte[] image;
 
     private Boolean status;
 

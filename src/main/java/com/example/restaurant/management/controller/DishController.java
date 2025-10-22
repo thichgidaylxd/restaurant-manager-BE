@@ -2,6 +2,7 @@ package com.example.restaurant.management.controller;
 
 
 import com.example.restaurant.management.dto.ApiRe.ApiResponse;
+import com.example.restaurant.management.dto.Dish.DishRequest;
 import com.example.restaurant.management.dto.Dish.DishResponse;
 import com.example.restaurant.management.entity.Dish;
 import com.example.restaurant.management.service.DishService;
@@ -39,7 +40,7 @@ public class DishController {
     }
 
     @PostMapping
-    public ApiResponse<DishResponse> createDish(@RequestBody Dish dish){
+    public ApiResponse<DishResponse> createDish(@RequestBody DishRequest dish){
         DishResponse newDish = dishService.createDish(dish);
         return ApiResponse.<DishResponse>builder()
                 .data(newDish)
