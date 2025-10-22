@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.naming.AuthenticationException;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
@@ -36,7 +35,5 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(errorCode.getHttpStatus()).body(apiErrorResponse);
     }
-
-
 }
 

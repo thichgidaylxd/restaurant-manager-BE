@@ -35,6 +35,7 @@ public class Dish {
     private String note;
 
     @Lob
+    @Column(name = "image", columnDefinition = "bytea")
     private byte[] image;
 
     private Boolean status;

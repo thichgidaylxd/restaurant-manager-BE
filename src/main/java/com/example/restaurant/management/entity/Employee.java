@@ -27,6 +27,8 @@ public class Employee {
     @Column(nullable = false)
     private String employeeName;
 
+    @Lob
+    @Column(name = "image", columnDefinition = "bytea")
     private byte[] image;
 
     private String address;
