@@ -86,7 +86,7 @@ public class EmployeeService {
             }
         }
 
-        employee.setEmployeeName(request.getName());
+        employee.setEmployeeName(request.getEmployeeName());
         employee.setPosition(position);
         employee.setImage(imageBytes);  // Set byte[] đã decode
         employee.setPhoneNumber(request.getPhoneNumber());

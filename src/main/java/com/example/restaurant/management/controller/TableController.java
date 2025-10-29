@@ -28,16 +28,12 @@ public class TableController {
 
     @GetMapping
     public ApiResponse<List<TableResponse>> getAllTable() {
-
         List<TableResponse> allTables = tableService.findAll();
-
         return ApiResponse.<List<TableResponse>>builder()
                 .data(allTables)
                 .message("Tất cả bàn")
                 .build();
     }
-
-
 
 
 

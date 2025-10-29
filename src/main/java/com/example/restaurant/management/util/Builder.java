@@ -126,13 +126,10 @@ public class Builder {
 
 
     public static EmployeeResponse toEmployeeResponse(Employee employee){
-        String image = employee.getImage() != null?
-                Base64.getEncoder().encodeToString(employee.getImage())
-                :null;
         return EmployeeResponse.builder()
                 .id(employee.getId())
                 .employeeName(employee.getEmployeeName())
-                .image(image)
+                .image(employee.getImage())
                 .positionId(employee.getPosition().getId())
                 .positionName(employee.getPosition().getName())
                 .phoneNumber(employee.getPhoneNumber())

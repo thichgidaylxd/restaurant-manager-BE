@@ -16,7 +16,7 @@ public class EmployeeResponse {
     private UUID id;
     private UUID positionId;
     private String positionName;
-    private String image;
+    private byte[] image;
     private String employeeName;
     private String address;
     private LocalDate birthDate;

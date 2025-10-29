@@ -41,6 +41,7 @@ public class EmployeeController {
 
     @PutMapping
     public ApiResponse<EmployeeResponse> updateEmployee(@RequestBody EmployeeUpdateRequest request){
+        System.out.println(request);
         return ApiResponse.<EmployeeResponse>builder()
                 .data(employeeService.updateEmployee(request))
                 .message("Cập nhật nhân viên thành công")
